@@ -5,17 +5,22 @@ import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/
 const isBypass = localStorage.getItem('devBypass') === 'true';
 const hasSession = localStorage.getItem('userRole') !== null;
 
-if (isBypass || hasSession) {
-    initAppUI(); // Carrega os botões do admin instantaneamente
-}
-
 // 2. Monitoramento Seguro do Firebase em Segundo Plano
 try {
     onAuthStateChanged(auth, (user) => {
-        // Se NÃO estiver logado de nenhuma forma...
-        if (!user && !isBypass && !hasSession) {
-            if (!window.location.href.endsWith('index.html') && !window.location.pathname.endsWith('/')) {
-                window.location.href = '../index.html';
+        const isLoginPage = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/') || window.location.pathname.endsWith('sistemaassistencia');
+
+        if (user || isBypass || hasSession) {
+            // LOGADO: Se abrir o app, vai direto pro dashboard sem pedir senha!
+            if (isLoginPage) {
+                window.location.replace('pages/dashboard.html'); // replace() evita o erro de voltar pro login
+            } else {
+                initAppUI(); 
+            }
+        } else {
+            // NÃO LOGADO: Protege as páginas internas chutando para o login
+            if (!isLoginPage) {
+                window.location.replace('../index.html');
             }
         }
     });
@@ -42,7 +47,7 @@ if (logoutBtn) {
             if (result.isConfirmed) {
                 signOut(auth).catch(() => {}).finally(() => {
                     localStorage.clear();
-                    window.location.href = '../index.html';
+                    window.location.replace('../index.html');
                 });
             }
         });

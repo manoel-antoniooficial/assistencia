@@ -97,6 +97,6 @@ function redirecionarDashboard() {
         timer: 1000,
         showConfirmButton: false
     }).then(() => {
-        window.location.href = 'pages/dashboard.html';
+        window.location.replace('pages/dashboard.html');
     });
 }
