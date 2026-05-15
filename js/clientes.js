@@ -29,8 +29,9 @@ if (formCliente) {
             const clientesRef = ref(db, 'clientes');
             const novoClienteRef = push(clientesRef);
             
-            // Salva os dados
-            await set(novoClienteRef, novoCliente);
+            // Salva os dados com limite de tempo (Timeout de 5s para não travar a tela)
+            const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("TIMEOUT_BANCO")), 5000));
+            await Promise.race([set(novoClienteRef, novoCliente), timeoutPromise]);
 
             Swal.fire({
                 icon: 'success',
@@ -49,10 +50,14 @@ if (formCliente) {
 
         } catch (error) {
             console.error("Erro ao salvar cliente:", error);
+            
+            let msgErro = 'Não foi possível cadastrar o cliente.';
+            if (error.message === 'TIMEOUT_BANCO') msgErro = 'Sem conexão com o Banco de Dados. Crie o Realtime Database no painel do Firebase ou verifique o link.';
+
             Swal.fire({
                 icon: 'error',
                 title: 'Erro',
-                text: 'Não foi possível cadastrar o cliente.',
+                text: msgErro,
                 background: '#18181b',
                 color: '#fff'
             });

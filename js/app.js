@@ -8,7 +8,8 @@ const hasSession = localStorage.getItem('userRole') !== null;
 // 2. Monitoramento Seguro do Firebase em Segundo Plano
 try {
     onAuthStateChanged(auth, (user) => {
-        const isLoginPage = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/') || window.location.pathname.endsWith('sistemaassistencia');
+        const path = window.location.pathname;
+        const isLoginPage = path.endsWith('index.html') || path === '/' || path.endsWith('/sistemaassistencia') || path.endsWith('/sistemaassistencia/');
 
         if (user || isBypass || hasSession) {
             // LOGADO: Se abrir o app, vai direto pro dashboard sem pedir senha!
@@ -56,35 +57,58 @@ if (logoutBtn) {
 
 // Inicializa os dados da Interface do Usuário (Sidebar)
 function initAppUI() {
-    const userName = localStorage.getItem('userName') || 'Usuário';
-    const userRole = localStorage.getItem('userRole') || 'TÉCNICO';
+    const runUI = () => {
+        try {
+            const userName = localStorage.getItem('userName') || 'Usuário';
+            const userRole = localStorage.getItem('userRole') || 'TÉCNICO';
 
-    document.getElementById('userNameDisplay').textContent = userName;
-    document.getElementById('userRoleDisplay').textContent = userRole;
-    document.getElementById('userInitial').textContent = userName.charAt(0);
+            const elName = document.getElementById('userNameDisplay');
+            if (elName) elName.textContent = userName;
 
-    // Controle de Acesso Baseado em Nível (Role)
-    if (userRole === 'ADMIN') {
-        document.getElementById('adminMenu').classList.remove('hidden');
-    }
+            const elRole = document.getElementById('userRoleDisplay');
+            if (elRole) elRole.textContent = userRole;
 
-    // Controle do Menu Mobile (Responsividade Kodular/App)
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const sidebar = document.getElementById('sidebar');
-    
-    if (mobileMenuBtn && sidebar && !document.getElementById('sidebarBackdrop')) {
-        const backdrop = document.createElement('div');
-        backdrop.id = 'sidebarBackdrop';
-        backdrop.className = 'fixed inset-0 bg-black/60 z-40 hidden backdrop-blur-sm transition-opacity';
-        document.body.appendChild(backdrop);
+            const elInitial = document.getElementById('userInitial');
+            if (elInitial) elInitial.textContent = userName.charAt(0);
 
-        const toggleMenu = () => {
-            sidebar.classList.toggle('-translate-x-full');
-            backdrop.classList.toggle('hidden');
-        };
+            const adminMenu = document.getElementById('adminMenu');
+            if (userRole === 'ADMIN' && adminMenu) {
+                adminMenu.classList.remove('hidden');
+            }
 
-        mobileMenuBtn.addEventListener('click', toggleMenu);
-        backdrop.addEventListener('click', toggleMenu);
+            // Controle do Menu Flutuante (App/Mobile)
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const sidebar = document.getElementById('sidebar');
+            
+            if (mobileMenuBtn && sidebar && !sidebar.dataset.menuInitialized) {
+                sidebar.dataset.menuInitialized = 'true'; // Impede ações duplicadas
+                
+                let backdrop = document.getElementById('sidebarBackdrop');
+                if (!backdrop) {
+                    backdrop = document.createElement('div');
+                    backdrop.id = 'sidebarBackdrop';
+                    backdrop.className = 'fixed inset-0 bg-black/60 z-40 hidden backdrop-blur-sm transition-opacity cursor-pointer';
+                    document.body.appendChild(backdrop);
+                }
+
+                const toggleMenu = () => {
+                    sidebar.classList.toggle('-translate-x-full');
+                    backdrop.classList.toggle('hidden');
+                };
+
+                mobileMenuBtn.addEventListener('click', toggleMenu);
+                backdrop.addEventListener('click', toggleMenu);
+            }
+        } catch (e) {
+            console.error("Erro na interface:", e);
+        }
+    };
+
+    // Garante que o menu e textos só carreguem DEPOIS que a página HTML inteira existir
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', runUI);
+    } else {
+        runUI();
     }
 }
 

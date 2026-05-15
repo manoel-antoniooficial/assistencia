@@ -32,14 +32,15 @@ if (formColaborador) {
             const userCredential = await createUserWithEmailAndPassword(authCadastro, email, senha);
             const user = userCredential.user;
 
-            // 2. Salva o Cargo no Realtime Database para ele ter acesso no sistema
-            await set(ref(db, 'usuarios/' + user.uid), {
+            // 2. Salva o Cargo no DB com limite de tempo
+            const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("TIMEOUT_BANCO")), 5000));
+            await Promise.race([set(ref(db, 'usuarios/' + user.uid), {
                 nome: nome,
                 email: email,
                 cargo: cargo,
                 status: "online",
                 data_criacao: new Date().toISOString()
-            });
+            }), timeoutPromise]);
 
             // 3. Desloga o usuário secundário para limpar a memória
             await signOut(authCadastro);
@@ -54,6 +55,7 @@ if (formColaborador) {
             let msg = 'Erro desconhecido.';
             if(error.code === 'auth/email-already-in-use') msg = 'Este e-mail já está cadastrado.';
             if(error.code === 'auth/weak-password') msg = 'A senha deve ter pelo menos 6 caracteres.';
+            if(error.message === 'TIMEOUT_BANCO') msg = 'Cadastro feito, mas o Banco de Dados não respondeu.';
             
             Swal.fire({ icon: 'error', title: 'Erro no Cadastro', text: msg, background: '#18181b', color: '#fff' });
         } finally {
