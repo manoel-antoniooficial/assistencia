@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - LomanTrix OS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1', // Indigo suave e minimalista
+                        darkBase: '#09090b', // Fundo principal super escuro
+                        darkPanel: '#18181b', // Painéis e menus (Zinc 900)
+                        darkBorder: '#27272a' // Bordas discretas (Zinc 800)
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-darkBase text-zinc-200 min-h-screen flex tracking-wide font-light">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-darkPanel border-r border-darkBorder flex flex-col transition-all duration-300">
+        <div class="h-16 flex items-center justify-center border-b border-darkBorder">
+            <h1 class="text-2xl font-bold text-primary"><i class="fa-solid fa-microchip"></i> LomanTrix</h1>
+        </div>
+        <nav class="flex-1 p-4 space-y-2">
+            <a href="dashboard.html" class="flex items-center p-3 bg-zinc-800/50 text-primary rounded-lg transition-colors">
+                <i class="fa-solid fa-chart-line w-6"></i> Dashboard
+            </a>
+            <a href="os.html" class="flex items-center p-3 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100 rounded-lg transition-colors">
+                <i class="fa-solid fa-clipboard-list w-6"></i> Ordens de Serviço
+            </a>
+            <a href="clientes.html" class="flex items-center p-3 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100 rounded-lg transition-colors">
+                <i class="fa-solid fa-users w-6"></i> Clientes
+            </a>
+            <div id="adminMenu" class="hidden">
+                <a href="#" class="flex items-center p-3 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100 rounded-lg transition-colors">
+                    <i class="fa-solid fa-chart-pie w-6"></i> Relatórios
+                </a>
+                <a href="#" class="flex items-center p-3 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100 rounded-lg transition-colors">
+                    <i class="fa-solid fa-user-tie w-6"></i> Colaboradores
+                </a>
+            </div>
+        </nav>
+        <div class="p-4 border-t border-darkBorder">
+            <div class="flex items-center mb-4">
+                <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center font-bold text-white uppercase" id="userInitial">U</div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium text-zinc-100" id="userNameDisplay">Usuário</p>
+                    <p class="text-xs text-zinc-500" id="userRoleDisplay">Cargo</p>
+                </div>
+            </div>
+            <button id="logoutBtn" class="w-full flex items-center justify-center p-2 text-sm text-red-400 border border-red-900/50 rounded-lg hover:bg-red-500/10 transition-colors">
+                <i class="fa-solid fa-sign-out-alt mr-2"></i> Sair do Sistema
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        <header class="h-16 bg-darkPanel border-b border-darkBorder flex items-center justify-between px-6">
+            <h2 class="text-xl font-semibold">Visão Geral</h2>
+            <button class="text-zinc-400 hover:text-zinc-100 relative">
+                <i class="fa-solid fa-bell text-xl"></i>
+                <span class="absolute -top-1 -right-1 bg-primary text-[10px] font-bold text-white rounded-full h-4 w-4 flex items-center justify-center">3</span>
+            </button>
+        </header>
+
+        <!-- Dashboard Body -->
+        <div class="flex-1 overflow-y-auto p-6 fade-in">
+            <!-- Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-darkPanel p-6 rounded-xl border border-darkBorder shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-zinc-400 text-sm font-medium">Aparelhos em Reparo</h3>
+                        <i class="fa-solid fa-screwdriver-wrench text-primary text-xl opacity-80"></i>
+                    </div>
+                    <p class="text-3xl font-semibold text-zinc-100">12</p>
+                </div>
+                <div class="bg-darkPanel p-6 rounded-xl border border-darkBorder shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-zinc-400 text-sm font-medium">Prontos / Aguardando</h3>
+                        <i class="fa-solid fa-box-open text-emerald-500 text-xl opacity-80"></i>
+                    </div>
+                    <p class="text-3xl font-semibold text-zinc-100">5</p>
+                </div>
+                <div class="bg-darkPanel p-6 rounded-xl border border-darkBorder shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-zinc-400 text-sm font-medium">Aguardando Peça</h3>
+                        <i class="fa-solid fa-clock text-amber-500 text-xl opacity-80"></i>
+                    </div>
+                    <p class="text-3xl font-semibold text-zinc-100">3</p>
+                </div>
+                <div class="bg-darkPanel p-6 rounded-xl border border-darkBorder shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-zinc-400 text-sm font-medium">Faturamento do Mês</h3>
+                        <i class="fa-solid fa-sack-dollar text-primary text-xl opacity-80"></i>
+                    </div>
+                    <p class="text-3xl font-semibold text-zinc-100">R$ 4.520</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="../js/app.js"></script>
+</body>
+</html>

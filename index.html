@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LomanTrix - Login de Acesso</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1', // Indigo suave
+                        darkBase: '#09090b', // Fundo principal super escuro (Zinc 950)
+                        darkPanel: '#18181b', // Painéis (Zinc 900)
+                        darkBorder: '#27272a' // Bordas discretas (Zinc 800)
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- SweetAlert2 e FontAwesome -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-darkBase text-zinc-200 min-h-screen flex items-center justify-center tracking-wide font-light">
+
+    <!-- TRAVA DE SEGURANÇA: Avisa se o arquivo for aberto com 2 cliques -->
+    <script>
+        if (window.location.protocol === 'file:') {
+            document.body.innerHTML = '<div style="padding: 40px; text-align: center; color: #ef4444; font-size: 1.2rem; font-family: sans-serif;"><b>🚨 MODO LOCAL DETECTADO:</b> Você abriu este arquivo diretamente do computador.<br><br>Para que o Banco de Dados funcione com segurança, este sistema deve ser acessado por um link real.<br><br>Por favor, hospede o sistema (ex: GitHub Pages) ou use um servidor local para testar.</div>';
+        }
+    </script>
+
+    <div class="bg-darkPanel p-8 rounded-2xl shadow-xl w-full max-w-md border border-darkBorder transition-all fade-in">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-primary mb-2"><i class="fa-solid fa-microchip"></i> LomanTrix</h1>
+            <p class="text-zinc-500 text-sm">Gestão de Assistência Técnica</p>
+        </div>
+
+        <form id="loginForm" class="space-y-6">
+            <div>
+                <label for="email" class="block text-sm font-medium text-zinc-400">Email de Acesso</label>
+                <div class="mt-1 relative rounded-lg shadow-sm">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fa-solid fa-envelope text-zinc-500"></i>
+                    </div>
+                    <input type="email" id="email" required
+                        class="bg-zinc-900 border border-darkBorder text-zinc-200 rounded-lg focus:ring-primary focus:border-primary block w-full pl-10 p-2.5 transition-colors" 
+                        placeholder="admin@lomantrix.com">
+                </div>
+            </div>
+
+            <div>
+                <label for="password" class="block text-sm font-medium text-zinc-400">Senha</label>
+                <div class="mt-1 relative rounded-lg shadow-sm">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fa-solid fa-lock text-zinc-500"></i>
+                    </div>
+                    <input type="password" id="password" required
+                        class="bg-zinc-900 border border-darkBorder text-zinc-200 rounded-lg focus:ring-primary focus:border-primary block w-full pl-10 p-2.5 transition-colors" 
+                        placeholder="••••••••">
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <div class="text-sm">
+                    <a href="#" class="font-medium text-primary hover:text-indigo-400 transition-colors">Esqueceu a senha?</a>
+                </div>
+                <div class="text-sm">
+                    <a href="pages/consulta.html" class="font-medium text-emerald-500 hover:text-emerald-400 transition-colors">Área do Cliente</a>
+                </div>
+            </div>
+
+            <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:ring-offset-darkBase transition-colors">
+                <i class="fa-solid fa-right-to-bracket mr-2 mt-1"></i> Entrar no Sistema
+            </button>
+        </form>
+    </div>
+
+    <!-- Script de Autenticação -->
+    <script type="module" src="js/auth.js"></script>
+</body>
+</html>
