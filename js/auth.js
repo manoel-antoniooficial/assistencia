@@ -21,7 +21,7 @@ if (loginForm) {
         btnSubmit.disabled = true;
 
         // BYPASS MASTER BLINDADO: Garante acesso imediato sem depender da internet ou Firebase
-        if (email === "masf@lomantrix.com" && password === "123456789") {
+        if (email === "contato.masf1991@gmail.com" && password === "123456789") {
             localStorage.setItem('devBypass', 'true');
             localStorage.setItem('userRole', 'ADMIN');
             localStorage.setItem('userName', 'MASF Admin');
