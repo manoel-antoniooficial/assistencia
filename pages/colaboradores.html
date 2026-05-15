@@ -33,7 +33,7 @@
                 <i class="fa-solid fa-users w-6"></i> Clientes
             </a>
             <div id="adminMenu" class="hidden">
-                <a href="#" class="flex items-center p-3 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100 rounded-lg transition-colors">
+                <a href="relatorios.html" class="flex items-center p-3 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100 rounded-lg transition-colors">
                     <i class="fa-solid fa-chart-pie w-6"></i> Relatórios
                 </a>
                 <a href="colaboradores.html" class="flex items-center p-3 bg-zinc-800/50 text-primary rounded-lg transition-colors">
@@ -71,7 +71,7 @@
             </div>
 
             <!-- Tabela -->
-            <div class="bg-darkPanel border border-darkBorder rounded-xl overflow-hidden shadow-sm">
+            <div class="bg-darkPanel border border-darkBorder rounded-xl overflow-x-auto shadow-sm">
                 <table class="w-full text-sm text-left text-zinc-400">
                     <thead class="text-xs text-zinc-300 uppercase bg-zinc-800/50 border-b border-darkBorder">
                         <tr>
@@ -91,7 +91,7 @@
 
     <!-- Modal Novo Colaborador -->
     <div id="modalColab" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 fade-in">
-        <div class="bg-darkPanel border border-darkBorder rounded-xl shadow-2xl w-full max-w-md mx-4 overflow-hidden">
+        <div class="bg-darkPanel border border-darkBorder rounded-xl shadow-2xl w-full max-w-2xl mx-4 overflow-hidden">
             <div class="flex justify-between items-center p-5 border-b border-darkBorder bg-zinc-800/30">
                 <h3 class="text-lg font-semibold text-zinc-100">Criar Acesso ao Sistema</h3>
                 <button onclick="fecharModalColab()" class="text-zinc-400 hover:text-zinc-100 transition-colors">
@@ -99,28 +99,30 @@
                 </button>
             </div>
             <form id="formColaborador" class="p-6 space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-zinc-400 mb-1">Nome do Funcionário</label>
-                    <input type="text" id="colNome" required class="bg-zinc-900 border border-darkBorder text-zinc-200 rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-zinc-400 mb-1">Cargo no Sistema</label>
-                    <select id="colCargo" required class="bg-zinc-900 border border-darkBorder text-zinc-200 rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5">
-                        <option value="TÉCNICO">Técnico (Acesso à OS e Clientes)</option>
-                        <option value="ATENDENTE">Atendente (Acesso Básico)</option>
-                        <option value="ADMIN">Administrador (Acesso Total)</option>
-                    </select>
-                </div>
-                <div class="pt-2 border-t border-darkBorder">
-                    <label class="block text-sm font-medium text-zinc-400 mb-1">E-mail de Login</label>
-                    <input type="email" id="colEmail" required class="bg-zinc-900 border border-darkBorder text-zinc-200 rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5" placeholder="nome@lomantrix.com">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-zinc-400 mb-1">Senha (Mínimo 6 caracteres)</label>
-                    <input type="password" id="colSenha" required minlength="6" class="bg-zinc-900 border border-darkBorder text-zinc-200 rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-zinc-400 mb-1">Nome do Funcionário</label>
+                        <input type="text" id="colNome" required class="bg-zinc-900 border border-darkBorder text-zinc-200 rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-zinc-400 mb-1">Cargo no Sistema</label>
+                        <select id="colCargo" required class="bg-zinc-900 border border-darkBorder text-zinc-200 rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5">
+                            <option value="TÉCNICO">Técnico (Acesso à OS e Clientes)</option>
+                            <option value="ATENDENTE">Atendente (Acesso Básico)</option>
+                            <option value="ADMIN">Administrador (Acesso Total)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-zinc-400 mb-1">E-mail de Login</label>
+                        <input type="email" id="colEmail" required class="bg-zinc-900 border border-darkBorder text-zinc-200 rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5" placeholder="nome@lomantrix.com">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-zinc-400 mb-1">Senha (Mínimo 6 caracteres)</label>
+                        <input type="password" id="colSenha" required minlength="6" class="bg-zinc-900 border border-darkBorder text-zinc-200 rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5">
+                    </div>
                 </div>
                 
-                <div class="flex justify-end pt-4 space-x-3">
+                <div class="flex justify-end pt-4 mt-2 space-x-3 border-t border-darkBorder">
                     <button type="button" onclick="fecharModalColab()" class="px-4 py-2 text-sm font-medium text-zinc-300 bg-zinc-800 border border-darkBorder rounded-lg hover:bg-zinc-700 transition-colors">Cancelar</button>
                     <button type="submit" id="btnSalvarColab" class="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-indigo-500 transition-colors"><i class="fa-solid fa-save mr-2"></i> Criar Conta</button>
                 </div>

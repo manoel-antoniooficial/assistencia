@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ordens de Serviço - LomanTrix OS</title>
+    <title>Relatórios - LomanTrix OS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="bg-darkBase text-zinc-200 min-h-screen flex tracking-wide font-light">
 
@@ -26,14 +27,14 @@
             <a href="dashboard.html" class="flex items-center p-3 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100 rounded-lg transition-colors">
                 <i class="fa-solid fa-chart-line w-6"></i> Dashboard
             </a>
-            <a href="os.html" class="flex items-center p-3 bg-zinc-800/50 text-primary rounded-lg transition-colors">
+            <a href="os.html" class="flex items-center p-3 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100 rounded-lg transition-colors">
                 <i class="fa-solid fa-clipboard-list w-6"></i> Ordens de Serviço
             </a>
             <a href="clientes.html" class="flex items-center p-3 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100 rounded-lg transition-colors">
                 <i class="fa-solid fa-users w-6"></i> Clientes
             </a>
             <div id="adminMenu" class="hidden">
-                <a href="relatorios.html" class="flex items-center p-3 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100 rounded-lg transition-colors">
+                <a href="relatorios.html" class="flex items-center p-3 bg-zinc-800/50 text-primary rounded-lg transition-colors">
                     <i class="fa-solid fa-chart-pie w-6"></i> Relatórios
                 </a>
                 <a href="colaboradores.html" class="flex items-center p-3 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100 rounded-lg transition-colors">
@@ -58,52 +59,56 @@
     <!-- Main Content -->
     <main class="flex-1 flex flex-col h-screen overflow-hidden">
         <header class="h-16 bg-darkPanel border-b border-darkBorder flex items-center justify-between px-6">
-            <h2 class="text-xl font-semibold">Ordens de Serviço</h2>
+            <h2 class="text-xl font-semibold">Desempenho e Financeiro</h2>
+            <button class="bg-zinc-800 hover:bg-zinc-700 text-sm px-3 py-1.5 rounded text-zinc-300 transition-colors border border-darkBorder"><i class="fa-solid fa-print mr-2"></i> Exportar PDF</button>
         </header>
 
         <!-- Body -->
         <div class="flex-1 overflow-y-auto p-6 fade-in">
-            <div class="flex justify-between items-center mb-6">
-                <div class="relative w-72">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i class="fa-solid fa-search text-zinc-500"></i>
-                    </div>
-                    <input type="text" id="searchOS" class="bg-darkPanel border border-darkBorder text-zinc-200 rounded-lg focus:ring-primary focus:border-primary block w-full pl-10 p-2.5" placeholder="Buscar OS ou Cliente...">
-                </div>
+            <!-- Área Gráfica -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                 
-                <!-- O botão NOVA OS vai abrir o modal que faremos a seguir -->
-                <button onclick="abrirModalOS()" class="bg-primary hover:bg-indigo-500 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm flex items-center">
-                    <i class="fa-solid fa-plus mr-2"></i> Nova O.S.
-                </button>
-            </div>
+                <!-- Gráfico Principal (Ocupa 2 espaços) -->
+                <div class="bg-darkPanel border border-darkBorder rounded-xl p-5 shadow-sm lg:col-span-2">
+                    <h3 class="text-zinc-300 font-medium mb-4">Faturamento Bruto (Últimos 6 meses)</h3>
+                    <div class="relative h-64 w-full">
+                        <canvas id="graficoFaturamento"></canvas>
+                    </div>
+                </div>
 
-            <!-- Tabela de OS -->
-            <div class="bg-darkPanel border border-darkBorder rounded-xl overflow-x-auto shadow-sm">
-                <table class="w-full text-sm text-left text-zinc-400">
-                    <thead class="text-xs text-zinc-300 uppercase bg-zinc-800/50 border-b border-darkBorder">
-                        <tr>
-                            <th scope="col" class="px-6 py-4">OS Nº</th>
-                            <th scope="col" class="px-6 py-4">Cliente</th>
-                            <th scope="col" class="px-6 py-4">Aparelho</th>
-                            <th scope="col" class="px-6 py-4">Status</th>
-                            <th scope="col" class="px-6 py-4">Valor</th>
-                            <th scope="col" class="px-6 py-4">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabelaOS" class="divide-y divide-darkBorder">
-                        <tr><td colspan="6" class="px-6 py-8 text-center text-zinc-500">Nenhuma Ordem de Serviço registrada.</td></tr>
-                    </tbody>
-                </table>
+                <!-- Bloco de Resumo Financeiro -->
+                <div class="bg-darkPanel border border-darkBorder rounded-xl p-5 shadow-sm space-y-4">
+                    <h3 class="text-zinc-300 font-medium mb-2">Resumo do Mês Atual</h3>
+                    
+                    <div class="p-4 bg-zinc-900/50 rounded-lg border border-darkBorder">
+                        <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Receita Total</p>
+                        <p class="text-2xl font-bold text-emerald-500">R$ 12.450,00</p>
+                    </div>
+                    
+                    <div class="p-4 bg-zinc-900/50 rounded-lg border border-darkBorder">
+                        <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Custo de Peças (Estimado)</p>
+                        <p class="text-2xl font-bold text-red-400">R$ 4.120,00</p>
+                    </div>
+
+                    <div class="p-4 bg-zinc-900/50 rounded-lg border border-darkBorder">
+                        <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Serviços Concluídos</p>
+                        <p class="text-2xl font-bold text-primary">42 OS</p>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
 
     <script type="module" src="../js/app.js"></script>
-    <script type="module" src="../js/os.js"></script>
+    
+    <!-- Inicialização Básica do Gráfico -->
     <script>
-        function abrirModalOS() {
-            Swal.fire({ icon: 'info', title: 'Em construção', text: 'Vamos construir o modal completo do checklist a seguir!', background: '#18181b', color: '#fff'});
-        }
+        const ctx = document.getElementById('graficoFaturamento').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: { labels: ['Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro'], datasets: [{ label: 'Faturamento R$', data: [5200, 7100, 6800, 8400, 10200, 12450], backgroundColor: '#6366f1', borderRadius: 4 }] },
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { grid: { color: '#27272a' } }, x: { grid: { display: false } } }, plugins: { legend: { display: false } } }
+        });
     </script>
 </body>
 </html>
