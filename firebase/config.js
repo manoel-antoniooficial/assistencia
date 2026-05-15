@@ -3,7 +3,7 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth
 import { getDatabase } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
 // ATENÇÃO: Preencha com as chaves WEB (não a chave de serviço/private_key)
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyAzvsvVPdBGvndPtn08Ie5KaSpKTtV7oO0",
   authDomain: "assistenciatecnica-31b6b.firebaseapp.com",
   databaseURL: "https://assistenciatecnica-31b6b-default-rtdb.firebaseio.com",

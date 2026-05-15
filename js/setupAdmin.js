@@ -6,7 +6,7 @@ import { ref, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-dat
 // Chame a função criarAdminMasf() no console do navegador ou importe-a em app.js temporariamente.
 export async function criarAdminMasf() {
     try {
-        const email = "masf@lomantrix.com"; // Firebase Auth requer padrão de e-mail
+        const email = "contato.masf1991@gmail.com"; // Firebase Auth requer padrão de e-mail
         const senha = "123456789";
         
         console.log("Criando usuário admin...");

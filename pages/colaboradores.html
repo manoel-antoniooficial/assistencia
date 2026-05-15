@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colaboradores - LomanTrix OS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: { colors: { primary: '#6366f1', darkBase: '#09090b', darkPanel: '#18181b', darkBorder: '#27272a' } } }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-darkBase text-zinc-200 min-h-screen flex tracking-wide font-light">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-darkPanel border-r border-darkBorder flex flex-col transition-all duration-300">
+        <div class="h-16 flex items-center justify-center border-b border-darkBorder">
+            <h1 class="text-2xl font-bold text-primary"><i class="fa-solid fa-microchip"></i> LomanTrix</h1>
+        </div>
+        <nav class="flex-1 p-4 space-y-2">
+            <a href="dashboard.html" class="flex items-center p-3 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100 rounded-lg transition-colors">
+                <i class="fa-solid fa-chart-line w-6"></i> Dashboard
+            </a>
+            <a href="os.html" class="flex items-center p-3 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100 rounded-lg transition-colors">
+                <i class="fa-solid fa-clipboard-list w-6"></i> Ordens de Serviço
+            </a>
+            <a href="clientes.html" class="flex items-center p-3 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100 rounded-lg transition-colors">
+                <i class="fa-solid fa-users w-6"></i> Clientes
+            </a>
+            <div id="adminMenu" class="hidden">
+                <a href="#" class="flex items-center p-3 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100 rounded-lg transition-colors">
+                    <i class="fa-solid fa-chart-pie w-6"></i> Relatórios
+                </a>
+                <a href="colaboradores.html" class="flex items-center p-3 bg-zinc-800/50 text-primary rounded-lg transition-colors">
+                    <i class="fa-solid fa-user-tie w-6"></i> Colaboradores
+                </a>
+            </div>
+        </nav>
+        <div class="p-4 border-t border-darkBorder">
+            <div class="flex items-center mb-4">
+                <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center font-bold text-white uppercase" id="userInitial">U</div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium text-zinc-100" id="userNameDisplay">Usuário</p>
+                    <p class="text-xs text-zinc-500" id="userRoleDisplay">Cargo</p>
+                </div>
+            </div>
+            <button id="logoutBtn" class="w-full flex items-center justify-center p-2 text-sm text-red-400 border border-red-900/50 rounded-lg hover:bg-red-500/10 transition-colors">
+                <i class="fa-solid fa-sign-out-alt mr-2"></i> Sair do Sistema
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        <header class="h-16 bg-darkPanel border-b border-darkBorder flex items-center justify-between px-6">
+            <h2 class="text-xl font-semibold">Equipe e Acessos</h2>
+        </header>
+
+        <!-- Body -->
+        <div class="flex-1 overflow-y-auto p-6 fade-in">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg text-zinc-300">Quadro de Funcionários</h3>
+                <button onclick="abrirModalColab()" class="bg-primary hover:bg-indigo-500 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm flex items-center">
+                    <i class="fa-solid fa-user-plus mr-2"></i> Novo Colaborador
+                </button>
+            </div>
+
+            <!-- Tabela -->
+            <div class="bg-darkPanel border border-darkBorder rounded-xl overflow-hidden shadow-sm">
+                <table class="w-full text-sm text-left text-zinc-400">
+                    <thead class="text-xs text-zinc-300 uppercase bg-zinc-800/50 border-b border-darkBorder">
+                        <tr>
+                            <th scope="col" class="px-6 py-4">Nome</th>
+                            <th scope="col" class="px-6 py-4">Email</th>
+                            <th scope="col" class="px-6 py-4">Cargo / Permissão</th>
+                            <th scope="col" class="px-6 py-4">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaColaboradores" class="divide-y divide-darkBorder">
+                        <tr><td colspan="4" class="px-6 py-8 text-center text-zinc-500"><i class="fa-solid fa-circle-notch fa-spin"></i> Carregando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Novo Colaborador -->
+    <div id="modalColab" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 fade-in">
+        <div class="bg-darkPanel border border-darkBorder rounded-xl shadow-2xl w-full max-w-md mx-4 overflow-hidden">
+            <div class="flex justify-between items-center p-5 border-b border-darkBorder bg-zinc-800/30">
+                <h3 class="text-lg font-semibold text-zinc-100">Criar Acesso ao Sistema</h3>
+                <button onclick="fecharModalColab()" class="text-zinc-400 hover:text-zinc-100 transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <form id="formColaborador" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-zinc-400 mb-1">Nome do Funcionário</label>
+                    <input type="text" id="colNome" required class="bg-zinc-900 border border-darkBorder text-zinc-200 rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-zinc-400 mb-1">Cargo no Sistema</label>
+                    <select id="colCargo" required class="bg-zinc-900 border border-darkBorder text-zinc-200 rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5">
+                        <option value="TÉCNICO">Técnico (Acesso à OS e Clientes)</option>
+                        <option value="ATENDENTE">Atendente (Acesso Básico)</option>
+                        <option value="ADMIN">Administrador (Acesso Total)</option>
+                    </select>
+                </div>
+                <div class="pt-2 border-t border-darkBorder">
+                    <label class="block text-sm font-medium text-zinc-400 mb-1">E-mail de Login</label>
+                    <input type="email" id="colEmail" required class="bg-zinc-900 border border-darkBorder text-zinc-200 rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5" placeholder="nome@lomantrix.com">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-zinc-400 mb-1">Senha (Mínimo 6 caracteres)</label>
+                    <input type="password" id="colSenha" required minlength="6" class="bg-zinc-900 border border-darkBorder text-zinc-200 rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5">
+                </div>
+                
+                <div class="flex justify-end pt-4 space-x-3">
+                    <button type="button" onclick="fecharModalColab()" class="px-4 py-2 text-sm font-medium text-zinc-300 bg-zinc-800 border border-darkBorder rounded-lg hover:bg-zinc-700 transition-colors">Cancelar</button>
+                    <button type="submit" id="btnSalvarColab" class="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-indigo-500 transition-colors"><i class="fa-solid fa-save mr-2"></i> Criar Conta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="../js/app.js"></script>
+    <script type="module" src="../js/colaboradores.js"></script>
+    <script>
+        function abrirModalColab() { document.getElementById('modalColab').classList.remove('hidden'); document.getElementById('modalColab').classList.add('flex'); }
+        function fecharModalColab() { document.getElementById('modalColab').classList.add('hidden'); document.getElementById('modalColab').classList.remove('flex'); document.getElementById('formColaborador').reset(); }
+    </script>
+</body>
+</html>
