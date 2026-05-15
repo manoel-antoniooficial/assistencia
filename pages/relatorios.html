@@ -19,9 +19,9 @@
 <body class="bg-darkBase text-zinc-200 min-h-screen flex tracking-wide font-light">
 
     <!-- Sidebar -->
-    <aside class="w-64 bg-darkPanel border-r border-darkBorder flex flex-col transition-all duration-300">
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-darkPanel border-r border-darkBorder flex flex-col transition-transform duration-300 -translate-x-full lg:relative lg:translate-x-0">
         <div class="h-16 flex items-center justify-center border-b border-darkBorder">
-            <h1 class="text-2xl font-bold text-primary"><i class="fa-solid fa-microchip"></i> LomanTrix</h1>
+            <a href="dashboard.html" class="flex items-center"><h1 class="text-2xl font-bold text-primary hover:text-indigo-400 transition-colors"><i class="fa-solid fa-microchip"></i> LomanTrix</h1></a>
         </div>
         <nav class="flex-1 p-4 space-y-2">
             <a href="dashboard.html" class="flex items-center p-3 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100 rounded-lg transition-colors">
@@ -59,8 +59,19 @@
     <!-- Main Content -->
     <main class="flex-1 flex flex-col h-screen overflow-hidden">
         <header class="h-16 bg-darkPanel border-b border-darkBorder flex items-center justify-between px-6">
-            <h2 class="text-xl font-semibold">Desempenho e Financeiro</h2>
-            <button class="bg-zinc-800 hover:bg-zinc-700 text-sm px-3 py-1.5 rounded text-zinc-300 transition-colors border border-darkBorder"><i class="fa-solid fa-print mr-2"></i> Exportar PDF</button>
+            <div class="flex items-center">
+                <button id="mobileMenuBtn" class="lg:hidden text-zinc-400 hover:text-zinc-100 mr-4 transition-colors">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <h2 class="text-xl font-semibold">Desempenho e Financeiro</h2>
+            </div>
+            <div class="flex items-center space-x-5">
+                <button onclick="abrirNotificacoes()" class="text-zinc-400 hover:text-zinc-100 relative transition-colors">
+                    <i class="fa-solid fa-bell text-xl"></i>
+                    <span class="absolute -top-1 -right-1 bg-primary text-[10px] font-bold text-white rounded-full h-4 w-4 flex items-center justify-center">3</span>
+                </button>
+                <button class="hidden md:flex bg-zinc-800 hover:bg-zinc-700 text-sm px-3 py-1.5 rounded text-zinc-300 transition-colors border border-darkBorder"><i class="fa-solid fa-print mr-2 mt-0.5"></i> Exportar PDF</button>
+            </div>
         </header>
 
         <!-- Body -->
@@ -103,11 +114,13 @@
     
     <!-- Inicialização Básica do Gráfico -->
     <script>
-        const ctx = document.getElementById('graficoFaturamento').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: { labels: ['Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro'], datasets: [{ label: 'Faturamento R$', data: [5200, 7100, 6800, 8400, 10200, 12450], backgroundColor: '#6366f1', borderRadius: 4 }] },
-            options: { responsive: true, maintainAspectRatio: false, scales: { y: { grid: { color: '#27272a' } }, x: { grid: { display: false } } }, plugins: { legend: { display: false } } }
+        document.addEventListener("DOMContentLoaded", function() {
+            const ctx = document.getElementById('graficoFaturamento').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: { labels: ['Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro'], datasets: [{ label: 'Faturamento R$', data: [5200, 7100, 6800, 8400, 10200, 12450], backgroundColor: '#6366f1', borderRadius: 4 }] },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { grid: { color: '#27272a' } }, x: { grid: { display: false } } }, plugins: { legend: { display: false } } }
+            });
         });
     </script>
 </body>

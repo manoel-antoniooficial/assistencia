@@ -67,4 +67,42 @@ function initAppUI() {
     if (userRole === 'ADMIN') {
         document.getElementById('adminMenu').classList.remove('hidden');
     }
+
+    // Controle do Menu Mobile (Responsividade Kodular/App)
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const sidebar = document.getElementById('sidebar');
+    
+    if (mobileMenuBtn && sidebar && !document.getElementById('sidebarBackdrop')) {
+        const backdrop = document.createElement('div');
+        backdrop.id = 'sidebarBackdrop';
+        backdrop.className = 'fixed inset-0 bg-black/60 z-40 hidden lg:hidden backdrop-blur-sm transition-opacity';
+        document.body.appendChild(backdrop);
+
+        const toggleMenu = () => {
+            sidebar.classList.toggle('-translate-x-full');
+            backdrop.classList.toggle('hidden');
+        };
+
+        mobileMenuBtn.addEventListener('click', toggleMenu);
+        backdrop.addEventListener('click', toggleMenu);
+    }
 }
+
+// Lógica do Sino de Notificações
+window.abrirNotificacoes = function() {
+    Swal.fire({
+        title: 'Notificações (3)',
+        html: `
+            <div class="text-left text-sm space-y-3 mt-4">
+                <div class="p-3 bg-zinc-800 rounded-lg border border-darkBorder flex items-center shadow-sm"><div class="w-2 h-2 bg-amber-500 rounded-full mr-3 shrink-0"></div><div><span class="text-primary font-bold">OS-1002</span> aguardando peça do fornecedor.</div></div>
+                <div class="p-3 bg-zinc-800 rounded-lg border border-darkBorder flex items-center shadow-sm"><div class="w-2 h-2 bg-emerald-500 rounded-full mr-3 shrink-0"></div><div><span class="text-primary font-bold">OS-0998</span> pronta para retirada!</div></div>
+                <div class="p-3 bg-zinc-800 rounded-lg border border-darkBorder flex items-center shadow-sm"><div class="w-2 h-2 bg-blue-500 rounded-full mr-3 shrink-0"></div><div>Bem-vindo ao novo sistema LomanTrix!</div></div>
+            </div>
+        `,
+        background: '#18181b',
+        color: '#fff',
+        showConfirmButton: true,
+        confirmButtonColor: '#6366f1',
+        confirmButtonText: 'Fechar painel'
+    });
+};
