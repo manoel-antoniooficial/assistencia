@@ -75,7 +75,7 @@ function initAppUI() {
     if (mobileMenuBtn && sidebar && !document.getElementById('sidebarBackdrop')) {
         const backdrop = document.createElement('div');
         backdrop.id = 'sidebarBackdrop';
-        backdrop.className = 'fixed inset-0 bg-black/60 z-40 hidden lg:hidden backdrop-blur-sm transition-opacity';
+        backdrop.className = 'fixed inset-0 bg-black/60 z-40 hidden backdrop-blur-sm transition-opacity';
         document.body.appendChild(backdrop);
 
         const toggleMenu = () => {
